@@ -79,7 +79,7 @@ define(["require", "exports", "pages/game/the_player"], function (require, expor
                 }
                 break;
             case " ":
-                $("body").innerHTML = $("body").innerHTML +
+                $("body")[0].innerHTML = $("body")[0].innerHTML +
                 `
                         <div id="pause_background" onclick="(()=>{$('#pause_background').remove()})()"
                             style="background-color: #00000030; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 100;" >

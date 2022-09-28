@@ -11,7 +11,7 @@ define(["require", "exports", "pages/game/game_process", "pages/game/the_stage",
     /**
      *
      */
-    game_process_1.initializeEventActions();
+    game_process_1.initializeEvents();
     console.log("event action initialized.");
     subscribeEvents();
     console.log("event subscriber initialized.");

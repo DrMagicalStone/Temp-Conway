@@ -25,8 +25,6 @@ define(["require", "exports"], function (require, exports) {
     function initializeCanvas() {
         // Create canvas and element on canvas based on user's device's width
         exports.canvas = ($("#cwf")[0]);
-        exports.canvas.width = window.innerWidth;
-        exports.canvas.height = window.innerHeight;
         setCanvas(exports.canvas, window.innerWidth, window.innerHeight);
         // Init the canvas and its context.
         var context = exports.canvas.getContext("2d");

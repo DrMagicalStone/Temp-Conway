@@ -1,13 +1,28 @@
-define(["require", "exports", "js/entity/VisibleEntity", "js/entity/Bullet", "js/event/eventbus", "js/event/OverGameEvent"], function (require, exports, VisibleEntity_1, Bullet_1, eventbus_1, OverGameEvent_1) {
+define(["require", "exports", "js/entity/GolSpace", "js/entity/Bullet", "js/event/eventbus", "pages/game/canvas", "../lifegame/PatternLib"], function (require, exports, GolSpace_1, Bullet_1, eventbus_1, canvas_1, PatternLib_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setViscosity = exports.Player = void 0;
     /**
      * The plane that player controls
      */
-    class Player extends VisibleEntity_1.VisibleEntity {
-        constructor(engine, space, pos = { x_pos: space.width / 2, y_pos: space.height * 0.05 }) {
-            super("player", { x_pos: pos.x_pos, y_pos: pos.y_pos, x_velocity: 0, y_velocity: 0 }, space, true, space.canvas);
+    class Player extends GolSpace_1.GolSpace {
+        constructor(engine, space, pos = { x_pos: space.width / 2, y_pos: space.height * 0.30 }) {
+            super({ x_pos: pos.x_pos, y_pos: pos.y_pos, x_velocity: 0, y_velocity: 0 }, { width: 7, height: 7, absolute_width: 7 * canvas_1.block_length, absolute_height: 7 * canvas_1.block_length }, { min_x: 0, max_x: 7, min_y: 0, max_y: 7 }, space, space.canvas, () => ((grid, x, y) => {
+                if (grid.get(x, y)) {
+                    if (this.space.isThisPosAlive(Math.round(this.x_pos + x - 3.5), Math.round(this.y_pos + y - 3.5))) {
+                        console.log(x, y, this.hp);
+                        this.hp--;
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else {
+                    return false;
+                }
+            }), "player", { x_offset: -3.5, y_offset: -3.5 });
+            this.hp = 17;
             this.bullet_shoot_rate = 20;
             /**
              * The buffer which contains the key: effect, and value : remaining tick it have.
@@ -15,6 +30,7 @@ define(["require", "exports", "js/entity/VisibleEntity", "js/entity/Bullet", "js
             this.effect_buffer = new Map();
             this.invoke_count = 0;
             this.engine_vector = engine;
+            PatternLib_1.PatternLib.get("plane")(this.grid, 0, 7);
         }
         tick(time) {
             var acc;
@@ -50,14 +66,7 @@ define(["require", "exports", "js/entity/VisibleEntity", "js/entity/Bullet", "js
             super.tick(time);
             // Check if the player is already dead
             if (this.hp <= 0) {
-                // event_bus.post(new endgameevent());
-            }
-            {
-                var x_int = Math.round(this.x_pos - 0.5);
-                var y_int = Math.round(this.y_pos);
-                if (this.space.isThisPosAlive(x_int, y_int) || this.space.isThisPosAlive(x_int + 1, y_int)) {
-                    eventbus_1.event_bus.post(new OverGameEvent_1.OverGameEvent(), undefined, () => { });
-                }
+                eventbus_1.event_bus.launchEvent("game_over", undefined);
             }
             // Subtract remaining effect tick
             for (var ef of this.effect_buffer) {
@@ -77,11 +86,6 @@ define(["require", "exports", "js/entity/VisibleEntity", "js/entity/Bullet", "js
         }
         render() {
             super.render();
-            var y = this.convertY(this.y_pos);
-            var x = this.convertX(this.x_pos);
-            this.canvas.moveTo(x, y - 5);
-            this.canvas.lineTo(x - 10, y + 5);
-            this.canvas.lineTo(x + 10, y + 5);
         }
     }
     exports.Player = Player;

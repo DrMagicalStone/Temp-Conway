@@ -7,13 +7,11 @@ define(["require", "exports", "pages/game/the_player"], function (require, expor
      * move.x_move stands for move offset in pixels, as well as move.y_move
      */
     function downMouse(move_src) {
-        console.log("down");
         the_player_1.engine_vector.mouse_down = true;
         moveScreen(move_src.clientX, move_src.clientY);
     }
     exports.downMouse = downMouse;
     function upMouse(move_src) {
-        console.log("up");
         the_player_1.engine_vector.mouse_down = false;
     }
     exports.upMouse = upMouse;
@@ -77,20 +75,6 @@ define(["require", "exports", "pages/game/the_player"], function (require, expor
                     key_down_state.right = true;
                     the_player_1.engine_vector.x_from_key++;
                 }
-                break;
-            case " ":
-                $("body")[0].innerHTML = $("body")[0].innerHTML +
-                `
-                        <div id="pause_background" onclick="(()=>{$('#pause_background').remove()})()"
-                            style="background-color: #00000030; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 100;" >
-                            <div style="background-color: #ffffff; position: absolute; left: 50%; top: 50%;
-                                        -webkit-transform: translate(-50%,-50%);
-                                        -moz-transform: translate(-50%,-50%);
-                                        transform:translate(-50%,-50%);" onclick="(()=>$('#pause_background').remove())()">
-                                Game paused, press "space to start again"
-                            </div>
-                        </div >
-                `
                 break;
         }
     }

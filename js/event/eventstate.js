@@ -1,16 +1,22 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.detainablestate = exports.judgementstate = void 0;
-    /**
-     * Use these classes's instances to cancel or detain events.
-     */
-    class judgementstate {
+    exports.detainablestate = exports.callbackedstate = exports.judgementstate = exports.eventstate = void 0;
+    class eventstate {
         constructor(event) {
             this.event = event;
         }
         getEvent() {
             return this.event;
+        }
+    }
+    exports.eventstate = eventstate;
+    /**
+     * Use these classes's instances to cancel or detain events.
+     */
+    class judgementstate extends eventstate {
+        constructor(event) {
+            super(event);
         }
         isCanceled() {
             return this.canceled;
@@ -20,17 +26,23 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.judgementstate = judgementstate;
-    class detainablestate {
+    class callbackedstate extends eventstate {
         constructor(event, callback = undefined) {
+            super(event);
+            this.callback = callback;
+        }
+        doAction() {
+            this.callback();
+        }
+    }
+    exports.callbackedstate = callbackedstate;
+    class detainablestate extends callbackedstate {
+        constructor(event, callback = undefined) {
+            super(event, callback);
             /**
              * Detained times.
              */
             this.detainedTimes = 0;
-            this.event = event;
-            this.callback = callback;
-        }
-        getEvent() {
-            return this.event;
         }
         /**
          * A simple asynchronous wait pipeline.
@@ -46,7 +58,7 @@ define(["require", "exports"], function (require, exports) {
         }
         release() {
             if ((this.detainedTimes === 0) && (this.callback != undefined)) {
-                this.callback();
+                super.doAction();
             }
             else {
                 this.detainedTimes--;

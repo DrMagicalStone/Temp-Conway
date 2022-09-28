@@ -6,12 +6,12 @@ define(["require", "exports", "js/entity/entity", "pages/game/canvas"], function
      * A visible entity.
      */
     class VisibleEntity extends entity_1.entity {
-        constructor(type, kinematics, space, que_auto_render, canvas) {
+        constructor(type, kinematics, space, que_auto_render, canvas, render_centre = { x_offset: 0, y_offset: 0 }) {
             super(type, kinematics, space);
-            // this.renderer = renderer;
             this.canvas = canvas;
             this.canvas_height = canvas.canvas.height;
             this.will_auto_render = que_auto_render;
+            this.render_centre = render_centre;
         }
         tick(time) {
             super.tick(time);

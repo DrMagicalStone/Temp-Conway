@@ -6,7 +6,7 @@ define(["require", "exports", "js/event/event", "pages/game/the_space"], functio
      * News and posts it every tick. (- _- )
      */
     class TickEvent extends event_1.event {
-        constructor(current_time = new Date().getTime()) {
+        constructor(current_time = new Date().getTime() / 1000) {
             super("tick", (ev, space) => {
                 the_space_1.the_space.tick(current_time);
             });

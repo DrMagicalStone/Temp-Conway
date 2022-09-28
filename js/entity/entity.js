@@ -1,4 +1,4 @@
-define(["require", "exports", "../../pages/game/game_cycle"], function (require, exports, game_cycle_1) {
+define(["require", "exports", "pages/game/game_cycle", "pages/game/game_clock"], function (require, exports, game_cycle_1, game_clock_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.entity = void 0;
@@ -16,7 +16,7 @@ define(["require", "exports", "../../pages/game/game_cycle"], function (require,
                 this.space = space;
                 space.addEntity(this);
             }
-            this.last_update_time = new Date().getTime() / 1000.0;
+            this.last_update_time = game_clock_1.game_clock.getTime();
         }
         getPos(time) {
             var delta = time - this.last_update_time;
